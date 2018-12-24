@@ -1,10 +1,101 @@
 <html>
     <head>
         <title>IPL DATA</title>
+        <style>
+                body{
+                    margin-top: 30px;
+                    margin-left:40px;
+                }
+                </style>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>	
+        <script src="http://code.highcharts.com/highcharts.js"></script>
+        <script>
+          function numberOfMatches() {
+            fetch('http://localhost:5000/matchesplayed').then(function(response){
+             
+             response.json().then(function(data){
+            number(data);
+            }).catch(function(err){
+               console.log('FETCH parsing error',err)
+             })
+            })
+          }  
+          function numberOfWon() {
+            fetch('http://localhost:5000/matchesWon').then(function(response){
+             
+             response.json().then(function(data){
+            number(data);
+            }).catch(function(err){
+               console.log('FETCH parsing error',err)
+             })
+            })
+          }  
+          function extra_Runs() {
+            fetch('http://localhost:5000/extraRuns').then(function(response){
+             
+             response.json().then(function(data){
+            number(data);
+            }).catch(function(err){
+               console.log('FETCH parsing error',err)
+             })
+            })
+          }  
+          function economical_bowler() {
+            fetch('http://localhost:5000/economical').then(function(response){
+             
+             response.json().then(function(data){
+            number(data);
+            }).catch(function(err){
+               console.log('FETCH parsing error',err)
+             })
+            })
+          }  
+          
+        </script>
+        <script>
+           function number(data){
+               console.log(data);
+                        $('#container').highcharts({
+                        chart: {
+                            type: "column"
+                        },
+                        title: {
+                            text: "Matches Played"
+                        },
+                        xAxis: {
+                            categories: Object.keys(data),
+                            type: 'category',
+                            allowDecimals: false,
+                            title: {
+                                text: ""
+                            }
+                        },
+                        yAxis: {
+                            title: {
+                                text: "NO OF MATCHES"
+                            }
+                        },
+                        series: [{
+                            name: 'YEARS',
+                            data: Object.values(data)
+                        }]
+                    }); 
+                }
 
+        </script>
     </head>
+
     <body>
         <h1>first PAGE</h1>
-        <a href="http://localhost:3000/api/posts/2018/3?sortBy=name"><button type="text" >submit</button></a>
+        <button type="text"  onclick="numberOfMatches()">number of matches</button>
+        <button type="text"  onclick="numberOfWon()">Matches Won</button>
+        <button type="text"  onclick="extra_Runs()">Extra Runs</button>
+        <button type="text"  onclick="economical_bowler()">Economical Bowler</button>
+       
+       
+        <div style="width: 800px; margin: 2em auto; padding: 1em; border: 1px solid red; border-radius: 0.5em">
+                Highcharts data load from a JSON using manual JSON Processing
+                </div>
+                <div id="container" style="height: 400px"></div>
     </body>
 </html>
