@@ -67,6 +67,7 @@ svg {
            fetch('http://localhost:5000/matchesWon').then(function(response){
     
             response.json().then(function(data){
+                console.log(data);
                stacked(data);
             }).catch(function(err){
                console.log('FETCH parsing error',err)
@@ -130,41 +131,102 @@ svg {
 
                 
     function stacked(data) { 
-        var processed_json = new Array();
-        for (i = 0; i < data.length; i++) {
-    var item = {};
-    item["name"] = data[i].key;
-    item["data"] = data[i].value;
-    processed_json.push(item);
-  }
-       console.log(processed_json); 
-    var myChart = Highcharts.chart('contain', {
-  chart: {
-    type: 'bar'
-  },
-  title: {
-    text: 'Stacked bar chart'
-  },
-  xAxis: {
-    categories: Object.keys(data)
-  },
-  yAxis: {
-    min: 0,
-    title: {
-      text: 'Total fruit consumption'
-    }
-  },
-  legend: {
-    reversed: true
-  },
-  plotOptions: {
-    series: {
-      stacking: 'normal'
-    }
-  },
-  series: processed_json
-});
-};
+        
+                    
+                    let season = ['2008','2009','2010','2011','2012','2013','2014','2015','2016','2017']
+                    let teamNames = Object.keys(data)
+                    let teamArray=Object.values(data)
+                    // draw chart
+                    $('#container').highcharts({
+                chart: {
+                    type: "bar"
+                },
+                title: {
+                    text: "Matches won of all teams over all the years of IPL."
+                },
+                xAxis: {
+                    categories: season,
+                    type: 'category',
+                    allowDecimals: false,
+                    title: {
+                        text: "Years"
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: "Total number of matches."
+                    }
+                },
+                legend: {
+                    reversed: true
+                },
+                plotOptions: {
+                    series: {
+                        stacking: 'normal'
+                    }
+                },
+                series: [{
+                    name: teamNames[0],
+                    data: teamArray[0]
+                },
+                {
+                    name: teamNames[1],
+                    data: teamArray[1]
+                },
+                {
+                    name: teamNames[2],
+                    data: teamArray[2]
+                },
+                {
+                    name: teamNames[3],
+                    data: teamArray[3]
+                },
+                {
+                    name: teamNames[4],
+                    data: teamArray[4]
+                },
+                {
+                    name: teamNames[5],
+                    data: teamArray[5]
+                },
+                {
+                    name: teamNames[6],
+                    data: teamArray[6]
+                },
+                {
+                    name: teamNames[7],
+                    data: teamArray[7]
+                },
+                {
+                    name: teamNames[8],
+                    data: teamArray[8]
+                },
+                {
+                    name: teamNames[9],
+                    data: teamArray[9]
+                },
+                {
+                    name: teamNames[10],
+                    data: teamArray[10]
+                },
+                {
+                    name: teamNames[11],
+                    data: teamArray[11]
+                },
+                {
+                    name: teamNames[12],
+                    data: teamArray[12]
+                },
+               
+                ]
+            });
+        }
+
+                
+            
+
+
+        
 
         </script>
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8">
