@@ -2,13 +2,55 @@
     <head>
         <title>IPL DATA</title>
         <style>
-                body{
-                    margin-top: 30px;
-                    margin-left:40px;
-                }
-                </style>
+            body{
+    margin-top: 30px;
+    margin-left:40px;
+}
+
+.header {
+    text-align:center;
+    
+    color:red;
+}
+button {
+    font-size:20px; 
+    background-color:white;
+    border:2px solid black;
+
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.axis--x path {
+  display: none;
+}
+.path-line {
+  fill: none;
+  stroke: yellow;
+  stroke-width: 1.5px;
+}
+svg {
+  background: #f0f0f0;
+}
+
+.flex-container {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+        </style>
+        
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>	
         <script src="http://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
         <script>
           function numberOfMatches() {
             fetch('http://localhost:5000/matchesplayed').then(function(response){
@@ -20,11 +62,12 @@
              })
             })
           }  
+
           function numberOfWon() {
-            fetch('http://localhost:5000/matchesWon').then(function(response){
-             
-             response.json().then(function(data){
-            number(data);
+           fetch('http://localhost:5000/matchesWon').then(function(response){
+    
+            response.json().then(function(data){
+               stacked(data);
             }).catch(function(err){
                console.log('FETCH parsing error',err)
              })
@@ -82,20 +125,67 @@
                     }); 
                 }
 
+
+
+
+                
+    function stacked(data) { 
+        var processed_json = new Array();
+        for (i = 0; i < data.length; i++) {
+    var item = {};
+    item["name"] = data[i].key;
+    item["data"] = data[i].value;
+    processed_json.push(item);
+  }
+       console.log(processed_json); 
+    var myChart = Highcharts.chart('contain', {
+  chart: {
+    type: 'bar'
+  },
+  title: {
+    text: 'Stacked bar chart'
+  },
+  xAxis: {
+    categories: Object.keys(data)
+  },
+  yAxis: {
+    min: 0,
+    title: {
+      text: 'Total fruit consumption'
+    }
+  },
+  legend: {
+    reversed: true
+  },
+  plotOptions: {
+    series: {
+      stacking: 'normal'
+    }
+  },
+  series: processed_json
+});
+};
+
+        </script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8">
+
+ 
         </script>
     </head>
 
     <body>
-        <h1>first PAGE</h1>
+        <div class ="header"><h1>IPL DATA</h1></div>
+        <div class=flex-container>
         <button type="text"  onclick="numberOfMatches()">number of matches</button>
         <button type="text"  onclick="numberOfWon()">Matches Won</button>
         <button type="text"  onclick="extra_Runs()">Extra Runs</button>
         <button type="text"  onclick="economical_bowler()">Economical Bowler</button>
+        </div>
        
-       
-        <div style="width: 800px; margin: 2em auto; padding: 1em; border: 1px solid red; border-radius: 0.5em">
+        <!-- <div style="width: 800px; margin: 2em auto; padding: 1em; border: 1px solid red; border-radius: 0.5em">
                 Highcharts data load from a JSON using manual JSON Processing
-                </div>
+                </div> -->
                 <div id="container" style="height: 400px"></div>
+                <div id="contain" style="width:100%; height:400px;"></div>
     </body>
 </html>
