@@ -1,10 +1,10 @@
-module.exports={
-numberOfMatches:function(data){
-let year={};
-year=data.reduce(function(all,item){
-    all[item.season]=(all[item.season] ||0)+1;
-    return all;
-  },{})
-return year;
-}
-}
+module.exports = {
+  numberOfMatches(matches) {
+    let matchesPerYear = {};
+    matchesPerYear = matches.reduce((matchPerYear, match) => {
+      matchPerYear[match.season] = (matchPerYear[match.season] || 0) + 1;
+      return matchPerYear;
+    }, {});
+    return matchesPerYear;
+  },
+};

@@ -1,21 +1,19 @@
 module.exports = {
-    extra:function (data, data1) {
-        let matchId = data.reduce((file, item) => {
+ extra: function (match, match1) {
 
-            if (item.season == 2016) {
-                file.push(item.id);
-            }
-            return file;
-        }, [])
-        let team = data1.reduce((file, item) => {
-            if (matchId.includes(item.match_id)) {
-                file[item.batting_team] = (file[item.batting_team] || 0) + parseInt(item.extra_runs);
-            }
-            return file;
-        }, {});
-        return team;
-
-    }
-
+    let matchesId = match.reduce((matchId, match) => {
+      if (match.season == 2016) {
+        matchId.push(match.id)
+      }
+      return matchId
+    }, [])
+    let extraRunsPerTeam= match1.reduce((extraRunPerTeam, match) => {
+      if (matchesId.includes(match.match_id)) {
+        extraRunPerTeam[match.batting_team] = (extraRunPerTeam[match.batting_team] || 0) + parseInt(match.extra_runs)
+      }
+      return extraRunPerTeam
+    }, {})
+    return extraRunsPerTeam;
+  }
 
 }
