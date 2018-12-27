@@ -1,52 +1,34 @@
-var fs=require('fs')
-const data=require('./matches.json');
-var bodyparser=require('body-parser');
-const data1=require('./deliveries.json');
-
-var economy={}
-var id=[]
-var k=0;
-
-for(var i=0;i<data.length;i++)
+module.exports = {
+    economicalBowler:function(data,data1){
+	let matchId = data.reduce((file, item) => {
+		if (item.season == 2016) {
+			file.push(item.id);
+		}
+		return file;
+		}, [])
+		
+let totalRuns=data1.reduce((file,item)=>{
+if(matchId.includes(item.match_id))
 {
-    if(data[i].season==='2015')
-    {
-        id[k++]=parseInt(data[i].id)
-    }
-    
-}
+   file[item.bowler]=(file[item.bowler] || 0)+parseInt(item.total_runs);
+ }
+return file;
+},{})
 
-var len=id.length;
-console.log(len);
-var count=0,balls=0;
-
-module.exports={
-    economicalBowler: function(){
-
-for(var j=1;j<data1.length-1;j++)
-{
-   if((parseInt(data1[j].match_id))>id[1] && (parseInt(data1[j].match_id))<id[id.length-1])
+let balls=data1.reduce((file,item)=>{
+	if(matchId.includes(item.match_id))
+	{
+	   file[item.bowler]=(file[item.bowler] || 0)+1;
+	}
+	return file;
+	},{})
+for(let i in totalRuns){
+		if(totalRuns[i]){
+		totalRuns[i]=(totalRuns[i]/balls[i])*6;
+		 }
+		}
+	function sortProperties(obj)
    {
-
-       if(data1[j].bowler===data1[++j].bowler)
-         {
-          count=parseInt(data1[j].total_runs)+count;
-          balls=parseInt(data1[j].ball)+balls;
-         j--;
-         }
-         else
-         {
-           
-            economy[data1[j].bowler]=(((economy[data1[j].bowler]||0)+count)/balls)*6;
-            count=0;
-            balls=0;
-         }
-
-   }
-}
-
-function sortProperties(obj)
-{
   // convert object into array
 	var sortable=[];
 	for(var key in obj)
@@ -61,7 +43,7 @@ function sortProperties(obj)
 	return sortable; // array in format [ [ key1, val1 ], [ key2, val2 ], ... ]
 }
 
-var topBowler=sortProperties(economy);
+var topBowler=sortProperties(totalRuns);
 return topBowler;
-    }
+	}
 }
